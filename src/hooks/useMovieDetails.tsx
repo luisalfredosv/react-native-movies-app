@@ -20,11 +20,11 @@ export const useMovieDetails = (movieId: number): MovieDetailsState => {
   });
 
   const getMovieDetails = async () => {
-    const movieDetailPromise = await movies.get<MovieDetailsResponse>(
-      `/${movieId}`,
+    const movieDetailPromise = movies.get<MovieDetailsResponse>(
+      `/movie/${movieId}`,
     );
-    const creditsPromise = await movies.get<CreditsResponse>(
-      `/${movieId}/credits`,
+    const creditsPromise = movies.get<CreditsResponse>(
+      `/movie/${movieId}/credits`,
     );
 
     const [movieDetails, credits] = await Promise.all([

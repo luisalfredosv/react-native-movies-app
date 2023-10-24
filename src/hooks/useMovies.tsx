@@ -19,10 +19,10 @@ export const useMovies = () => {
   });
 
   const getMovies = async () => {
-    const nowPlayingPromise = movies.get<MoviesResponse>('/now_playing');
-    const popularPromise = movies.get<MoviesResponse>('/popular');
-    const topRelatedPromise = movies.get<MoviesResponse>('/top_rated');
-    const upcomingPromise = movies.get<MoviesResponse>('/upcoming');
+    const nowPlayingPromise = movies.get<MoviesResponse>('/movie/now_playing');
+    const popularPromise = movies.get<MoviesResponse>('/movie/popular');
+    const topRelatedPromise = movies.get<MoviesResponse>('/movie/top_rated');
+    const upcomingPromise = movies.get<MoviesResponse>('/movie/upcoming');
 
     const [nowPlaying, popular, topRelated, upcoming] = await Promise.all([
       nowPlayingPromise,

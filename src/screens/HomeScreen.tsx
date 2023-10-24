@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import Carousel from 'react-native-snap-carousel';
 import {
   ActivityIndicator,
@@ -7,6 +7,7 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Text,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -18,11 +19,14 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {GradientBackground} from '../components/GradientBackground';
 import {getImageColors} from '../helpers/get-colors';
+import {GradientContext} from '../contexts/GradientContext';
 
 const {width: windowWidth} = Dimensions.get('window');
 
 export const HomeScreen = () => {
   const {navigate} = useNavigation();
+  const {setMainColors} = useContext(GradientContext);
+
   const {
     isLoading,
     moviesNowPlaying,
@@ -36,8 +40,18 @@ export const HomeScreen = () => {
     const currentMovie = moviesNowPlaying[index];
     const uri = `https://image.tmdb.org/t/p/w500${currentMovie.poster_path}`;
 
-    const {primary, secondary} = await getImageColors(uri);
+    const {primary = '#49494b', secondary = '#01010b'} = await getImageColors(
+      uri,
+    );
+
+    setMainColors({primary, secondary});
   };
+
+  useEffect(() => {
+    if (moviesNowPlaying.length > 0) {
+      getPosterColors(0);
+    }
+  }, [moviesNowPlaying]);
 
   if (isLoading) {
     return (
@@ -55,13 +69,17 @@ export const HomeScreen = () => {
   return (
     <GradientBackground>
       <ScrollView>
-        {/* <View style={styles.searchButton}>
-        <TouchableOpacity>
-          <Icon color={'gray'} name="search-outline" size={30} />
-        </TouchableOpacity>
-      </View> */}
+        <View style={styles.searchButton}>
+          <TouchableOpacity onPress={() => navigate('SearchScreen')}>
+            <Icon color={'gray'} name="search-outline" size={35} />
+          </TouchableOpacity>
+        </View>
 
-        <View style={{marginTop: top + 20, marginBottom: bottom + 20}}>
+        <View
+          style={{
+            marginTop: top + 30,
+            marginBottom: bottom + 20,
+          }}>
           <View style={styles.carouserContainer}>
             <Carousel
               data={moviesNowPlaying}
@@ -87,13 +105,18 @@ export const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
-  carouserContainer: {height: 440},
+  carouserContainer: {height: 440, marginTop: 30},
   searchButton: {
     position: 'absolute',
     zIndex: 999,
     elevation: 10,
-    top: 10,
-    left: 5,
+    top: 15,
+    right: 15,
+  },
+  trendingMovies: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginLeft: 10,
+    color: 'gray',
   },
 });

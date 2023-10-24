@@ -15,7 +15,9 @@ export const HorizontalSlider = ({title, movies}: Props) => {
       <FlatList
         data={movies}
         renderItem={({item}: {item: Movie}) => (
-          <MoviePoster movie={item} width={140} height={200} />
+          <View style={{marginHorizontal: 5, flex: 1}}>
+            <MoviePoster movie={item} width={140} height={219} />
+          </View>
         )}
         keyExtractor={item => item.id.toString()}
         horizontal={true}
